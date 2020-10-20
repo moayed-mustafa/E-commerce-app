@@ -3,21 +3,22 @@ CREATE DATABASE ecommerce;
 
 \c ecommerce;
 
-DROP TABLE IF EXISTS Users;
-DROP TABLE IF EXISTS Carts;
-DROP TABLE IF EXISTS WishList;
-DROP TABLE IF EXISTS Orders;
+DROP TABLE users CASCADE ;
+DROP TABLE  carts CASCADE;
+DROP TABLE  wishlist CASCADE;
+DROP TABLE  orders CASCADE;
 
-CREATE TABLE Users (
-   id SERIAL PRIMARY KEY,
-   first_name text NOT NULL,
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username text NOT NULL UNIQUE,
+  first_name text NOT NULL,
   last_name text NOT NULL,
   email text NOT NULL,
   password text UNIQUE,
   address text
 );
 
-CREATE TABLE Carts (
+CREATE TABLE carts (
   id SERIAL PRIMARY KEY,
   user_id integer,
   product_id integer,
@@ -27,18 +28,7 @@ CREATE TABLE Carts (
   quantity integer DEFAULT 1
 );
 
-CREATE TABLE Orders (
-  id SERIAL PRIMARY KEY,
-  user_id integer,
-  cart_id integer,
-  product_id integer,
-  product_price integer,
-  product_img text,
-  product_title text,
-  quantity integer DEFAULT 1
-);
-
-CREATE TABLE WishList (
+CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id integer,
   cart_id integer,
@@ -49,12 +39,23 @@ CREATE TABLE WishList (
   quantity integer DEFAULT 1
 );
 
-ALTER TABLE Carts ADD FOREIGN KEY (user_id) REFERENCES Users (id);
+CREATE TABLE wishlist (
+  id SERIAL PRIMARY KEY,
+  user_id integer,
+  cart_id integer,
+  product_id integer,
+  product_price integer,
+  product_img text,
+  product_title text,
+  quantity integer DEFAULT 1
+);
 
-ALTER TABLE Orders ADD FOREIGN KEY (user_id) REFERENCES Users (id);
+ALTER TABLE carts ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
-ALTER TABLE Orders ADD FOREIGN KEY (cart_id) REFERENCES Carts (id);
+ALTER TABLE orders ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
-ALTER TABLE WishList ADD FOREIGN KEY (user_id) REFERENCES Users (id);
+ALTER TABLE orders ADD FOREIGN KEY (cart_id) REFERENCES carts (id);
 
-ALTER TABLE WishList ADD FOREIGN KEY (cart_id) REFERENCES Carts (id);
+ALTER TABLE wishlist ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE wishlist ADD FOREIGN KEY (cart_id) REFERENCES carts (id);
