@@ -44,10 +44,10 @@ router.post("/signup", async(req, res, next) => {
     if (error) return next({ status: 400, error: error.message });
 
     try {
-        const newUser = User.register(req.body)
+      const newUser = await User.register(req.body)
         const token = createToken(newUser);
         newUser._token = token
-        return res.status(201).json({ ...newUser });
+        return res.status(201).json({_token:token});
 
     } catch (e) {
         return next(e)
@@ -60,7 +60,7 @@ router.post("/signup", async(req, res, next) => {
 /** PATCH /[handle] {userData} => {user: updatedUser} */
 
 router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
-    try {
+  try {
 
       await User.authenticate({
         username: req.params.username,

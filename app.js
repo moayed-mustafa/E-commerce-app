@@ -22,6 +22,9 @@ app.use('/', authRoutes)
 const userRoutes = require("./routes/users")
 app.use('/users', userRoutes)
 
+const cartRoutes = require("./routes/carts")
+app.use('/carts', cartRoutes)
+
 
 
 
@@ -34,12 +37,12 @@ app.use(function(req, res, next) {
 
   /** general error handler */
 
-  app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
 
     return res.json({
-      error: err,
-      message: err.message
+      //* */ error: err,
+      message: err.message,
     });
   });
 
