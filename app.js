@@ -25,6 +25,9 @@ app.use('/users', userRoutes)
 const cartRoutes = require("./routes/carts")
 app.use('/carts', cartRoutes)
 
+const orderRoutes = require("./routes/orders")
+app.use('/orders', orderRoutes)
+
 
 
 

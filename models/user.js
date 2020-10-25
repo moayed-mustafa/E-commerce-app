@@ -31,7 +31,6 @@ class User{
       const isValid = await bcrypt.compare(data.password, user.password);
       if (isValid) {
         //  * create a cart for the user
-        // console.log(user)
         await Cart.makeCart(user.id)
         return user;
       }
