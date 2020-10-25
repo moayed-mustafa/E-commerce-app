@@ -18,7 +18,7 @@ a veriety of different products that you can browse based on the categories you 
   [Fake Product Api](https://fakestoreapi.com/)
 
   Backend Api for this project is bulit using node and published via postman :
-  [E-commerce backend](https://web.postman.co/collections/11551288-b2d9ac09-99df-48c9-96fc-036ad81d1ae3?version=latest&workspace=d5faf782-a7ee-4568-8883-70e3403fd50a)
+  [E-commerce backend](https://documenter.getpostman.com/view/11551288/TVYF8dyX)
 
   # Technologies:
    The E-commerce will use the following technologies:
