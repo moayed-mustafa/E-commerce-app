@@ -13,10 +13,10 @@ class Cart{
 
     //  * create a new cart
     static async makeCart(user_id) {
-        console.log("at the cart model", user_id)
+        // console.log("at the cart model", user_id)
         // first check if the user has a  cart to his name
         const cart = await this.getCartId(user_id)
-        console.log(cart)
+        // console.log(cart)
         if (cart.length > 0) return;
         else {
             await db.query(
@@ -39,16 +39,17 @@ class Cart{
             `
             SELECT * from items
             WHERE product_id = $1
-            `, [product_id]
+            AND user_id = $2
+            `, [product_id, user_id]
 
         )
         if (checkProduct.rowCount === 0) {
             cart_id = cart[0].id
              await db.query(
                 `INSERT INTO items
-                (cart_id, product_id, quantity)
-                VALUES($1, $2, $3)
-                `, [cart_id, product_id, 1]
+                (cart_id, user_id, product_id, quantity)
+                VALUES($1, $2, $3, $4)
+                `, [cart_id, user_id, product_id, 1]
             );
 
         } else {

@@ -14,7 +14,6 @@ class Order{
     static async createOrder(user_id) {
 
 
-
         const result = await db.query(`
             INSERT INTO orders
             (user_id) values($1)
@@ -35,7 +34,13 @@ class Order{
         console.log(cartResult)
         const cart_id = cartResult[0].id;
         console.log(cart_id)
-        //  insert into items
+
+        await this.updateItems(order_id, cart_id)
+    }
+
+
+    static async updateItems(order_id, cart_id) {
+
         await db.query(`
         UPDATE items
         SET order_id = $1
@@ -48,15 +53,29 @@ class Order{
         SET cart_id = $1
         WHERE cart_id = $2
         `, [null, cart_id])
+    }
 
 
+    static async getOrders(user_id) {
+        //  * this will have to be a join select statment to get the orders date as well
 
+        const result = await db.query(`
 
+            SELECT  order_id, product_id , quantity, order_date  FROM  items
+              JOIN orders
+            USING (user_id)
+            WHERE user_id = $1
 
+        ` , [user_id])
+        // WHERE user_id = $1   , [user_id]
 
+        return result.rows
+    }
 
+    static async deleteOrder(user_id) {
 
     }
+
 
 }
 
