@@ -72,7 +72,12 @@ class Order{
         return result.rows
     }
 
-    static async deleteOrder(user_id) {
+    static async deleteOrder(order_id) {
+
+        await db.query(`
+            DELETE FROM orders
+            WHERE id = $1
+        `,[order_id])
 
     }
 

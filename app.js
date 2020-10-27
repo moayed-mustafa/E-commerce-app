@@ -28,6 +28,9 @@ app.use('/carts', cartRoutes)
 const orderRoutes = require("./routes/orders")
 app.use('/orders', orderRoutes)
 
+const wishListRoutes = require("./routes/wishlists")
+app.use('/wishlist', wishListRoutes)
+
 
 
 
