@@ -35,14 +35,7 @@ class Cart{
         const cart = await this.getCartId(user_id)
 
         let cart_id;
-        const checkProduct = await db.query(
-            `
-            SELECT * from items
-            WHERE product_id = $1
-            AND user_id = $2
-            `, [product_id, user_id]
-
-        )
+        const checkProduct = await this.checkProduct(product_id, user_id)
         if (checkProduct.rowCount === 0) {
             cart_id = cart[0].id
              await db.query(
@@ -68,16 +61,14 @@ class Cart{
         //  remove an item from a cart
     static async removeFromCart(user_id, product_id) {
         const cart = await this.getCartId(user_id)
-
         let cart_id;
-        const checkProduct = await db.query(
-            `
-            SELECT quantity from items
-            WHERE product_id = $1
-            `, [product_id]
 
-        )
-        console.log(checkProduct.rows[0].quantity)
+
+        const checkProduct = await this.checkProduct(product_id, user_id)
+
+        if (checkProduct.rows.length === 0){
+            throw new ExpressError("can not remove an item that is not in cart", 404)
+        }
         if (checkProduct.rows[0].quantity === 1) {
             //  we want to delet the whole row
             cart_id = cart[0].id
@@ -120,6 +111,17 @@ class Cart{
         DELETE from carts
         WHERE user_id = $1
         `, [user_id])
+    }
+
+    static async checkProduct(product_id, user_id) {
+       return await db.query(
+            `
+            SELECT * from items
+            WHERE product_id = $1
+            AND user_id = $2
+            `, [product_id, user_id]
+
+        )
     }
 
 

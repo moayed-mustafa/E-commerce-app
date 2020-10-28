@@ -23,11 +23,6 @@ beforeEach(async () => {
         "address": "Main Beach Road, Abudhabi"
     }
 
-
-
-
-
-
      await User.register(test_user)
 })
 
@@ -198,8 +193,8 @@ describe("/DELETE/user/:username", () => {
             .send({ _token:fake_token })
 
         expect(result.statusCode).toEqual(401);
-        console.log(result.body)
-        expect(result.body).toHaveProperty( "message", "You are not authorized." )
+        expect(result.body)
+            .toHaveProperty("message", "You are not authorized.")
 
     })
 } )

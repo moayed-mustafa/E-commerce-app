@@ -15,13 +15,13 @@ const User = require("../models/user");
 
 /** POST / => add to cart*/
 
-router.post('/:username/add', authRequired, async (req, res, next) => {
+router.post('/:username/add', authRequired, ensureCorrectUser, async (req, res, next) => {
     try {
         const { id } = await User.findOne(req.params.username)
         //  *have to test the product_id manually since it comes from the front end
-        // product_id = req.body.product_id
-         await Cart.addToCart(id, 7890)
-        return res.send({msg: "item added"})
+        product_id = req.body.product_id || 7890
+         await Cart.addToCart(id, product_id)
+        return res.send({message: "item added"})
 
     } catch (e) {
         return next(e)
@@ -34,10 +34,10 @@ router.post('/:username/remove', authRequired  , ensureCorrectUser, async (req, 
     try {
         const {id} = await User.findOne(req.params.username)
         //  *have to test the product_id manually since it comes from the front end
-                // product_id = req.body.product_id
+        product_id = req.body.product_id || 7890
 
-         await Cart.removeFromCart(id, 7890)
-        return res.send({msg: "item removed"})
+         await Cart.removeFromCart(id, product_id)
+        return res.send({message: "item removed"})
 
     } catch (e) {
         return next(e)
@@ -51,7 +51,7 @@ router.delete('/:username/destroy-cart', authRequired , ensureCorrectUser, async
         const {id} = await User.findOne(req.params.username)
         //  *have to test the product_id manually since it comes from the front end
         await Cart.destroyCart(id)
-        return res.send({msg: "cart destroyed"})
+        return res.send({message: "cart destroyed"})
 
     } catch (e) {
         return next(e)
