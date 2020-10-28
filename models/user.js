@@ -52,7 +52,6 @@ class User{
             WHERE username = $1`,
         [data.username]
     );
-    console.log(duplicateCheck.rows[0])
 
       if (duplicateCheck.rows[0]) {
        new ExpressError(`There already exists a user with username '${data.username}`, 409);

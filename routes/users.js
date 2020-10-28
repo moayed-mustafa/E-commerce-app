@@ -38,7 +38,7 @@ router.get("/:username", authRequired, async function(req, res, next) {
 //   ============================================================================================================================================================
 
 /** POST / {userdata}  => {token: token} */
-router.post("/signup", async(req, res, next) => {
+router.post("/signup", async (req, res, next) => {
 
     const { error } = signUpSchema.validate(req.body)
     if (error) return next({ status: 400, error: error.message });
@@ -62,11 +62,6 @@ router.post("/signup", async(req, res, next) => {
 router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
   try {
 
-      await User.authenticate({
-        username: req.params.username,
-        password: req.body.password
-      });
-        delete req.body.password;
         //  * make an update user schema
         const {error} = updateUserSchema.validate(req.body)
       if (error) {

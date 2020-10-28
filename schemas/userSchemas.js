@@ -14,12 +14,11 @@ const signUpSchema = Joi.object({
 const updateUserSchema = Joi.object({
     username: Joi.string().min(6).max(18),
     password: Joi.string().pattern(/^[ A-Za-z0-9_@/#&+-]*$/),
-    newPassword: Joi.string().pattern(/^[ A-Za-z0-9_@/#&+-]*$/),
     first_name: Joi.string().min(2).max(12),
     last_name: Joi.string().min(2).max(12),
     email: Joi.string().email(),
     address: Joi.string(),
-    _token: Joi.string()
+    _token: Joi.string().required()
 })
 
 module.exports = {signUpSchema, updateUserSchema}
