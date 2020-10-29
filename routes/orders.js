@@ -22,10 +22,9 @@ router.post('/:username/order', authRequired, ensureCorrectUser, async (req, res
     try {
         const { id } = await User.findOne(req.params.username)
         await Order.createOrder(id)
-        return res.send({msg: " order submitted"})
+        return res.send({message: "order submitted"})
 
     } catch (e) {
-        console.log(e)
         return next(e)
     }
 

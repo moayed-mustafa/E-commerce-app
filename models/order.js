@@ -21,25 +21,28 @@ class Order{
         `, [user_id])
             if(!result) return new ExpressError('inserting into orders wernt wrong', 404)
 
-        console.log(result.rows[0])
         const {order_id} = result.rows[0]
-        console.log(order_id)
 
         // get the cart_id
         const cartResult = await Cart.getCartId(user_id)
 
-
         if(!cartResult) return new ExpressError('selecting from carts wernt wrong', 404)
-        console.log('Logging cart result:')
-        console.log(cartResult)
+
         const cart_id = cartResult[0].id;
-        console.log(cart_id)
 
         await this.updateItems(order_id, cart_id)
     }
 
 
     static async updateItems(order_id, cart_id) {
+        // maybe check here if the cart_id has anything on the items table
+        let isEmpty = await db.query(`
+
+            SELECT * FROM items
+            WHERE cart_id =$1
+        `, [cart_id]);
+        // * console.log(isEmpty.rows[0])
+        if(isEmpty.rows[0].product_id === null) throw new ExpressError('can not make an order with an empty cart', 404)
 
         await db.query(`
         UPDATE items

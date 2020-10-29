@@ -11,7 +11,6 @@ const db = require('../db')
 // set up the test:
 let test_user;
 let test_user_two;
-let addItem;
 let test_product_id = 344
 beforeEach(async () => {
     // create a couple of users
@@ -162,6 +161,44 @@ describe('Remove from cart, /carts/:username/remove', () => {
 
         expect(result.statusCode).toEqual(401)
         expect(result.body).toHaveProperty("message", "You are not authorized.")
+
+
+    })
+})
+
+describe('delete a cart', () => {
+    test('delete a cart successfuly', async () => {
+        let res = await request(app).post('/login').send({
+            username: test_user.username,
+            password: test_user.password
+        })
+        let result = await request(app).delete(`/carts/${test_user.username}/destroy-cart`)
+            .send({ _token: res.body._token })
+
+            expect(result.statusCode).toEqual(200)
+            expect(result.body).toHaveProperty("message", "cart destroyed")
+
+
+    })
+    test('delete a cart ,authentication failure', async () => {
+        let result = await request(app).delete(`/carts/${test_user.username}/destroy-cart`)
+            .send({  })
+
+            expect(result.statusCode).toEqual(401)
+            expect(result.body).toHaveProperty("message", "You must authenticate first.")
+
+
+    })
+    test('delete a cart ,authorization failure', async () => {
+        let res = await request(app).post('/login').send({
+            username: test_user_two.username,
+            password: test_user_two.password
+        })
+        let result = await request(app).delete(`/carts/${test_user.username}/destroy-cart`)
+            .send({ _token:res.body._token })
+
+            expect(result.statusCode).toEqual(401)
+            expect(result.body).toHaveProperty("message", "You are not authorized.")
 
 
     })
