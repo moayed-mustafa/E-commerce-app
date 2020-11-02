@@ -13,7 +13,7 @@ router.post("/login", async function (req, res, next) {
       const user = await User.authenticate(req.body);
       const token = createToken(user);
       user._token = token
-      //  * if I happen to need the whole use then just uncomment the line below
+      //  * if I happen to need the whole user then just uncomment the line below
       // return res.json({ ...user });
       return res.json({ _token:token });
     } catch (e) {

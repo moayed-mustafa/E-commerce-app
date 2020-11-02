@@ -1,10 +1,10 @@
 const request = require('supertest')
-const app = require('../app')
+const app = require('../../app')
 
-const User = require('../models/user')
+const User = require('../../models/user')
 
 process.env.NODE_ENV === 'test'
-const db = require('../db')
+const db = require('../../db')
 
 // set up the test:
 let test_user;
@@ -115,7 +115,78 @@ describe("make an order", () => {
 
 })
 
-describe("get order history", () => {
+describe('delete an order', () => {
+    test('delete an order successfuly', async () => {
+        // log in a user
+    let res = await request(app).post('/login').send({
+        username: test_user.username,
+        password: test_user.password
+    });
+
+    // add an item
+     await request(app).post(`/carts/${test_user.username}/add`)
+         .send({ product_id: test_product_id, _token:res.body._token })
+
+        //  make an order
+         await request(app).post(`/orders/${test_user.username}/order`)
+             .send({ _token: res.body._token })
+
+        // delete the order
+        let result = await request(app).delete(`/orders/${test_user.username}`)
+            .send({ _token: res.body._token })
+
+        expect(result.statusCode).toEqual(200)
+        expect(result.body).toHaveProperty('message', 'order deleted')
+
+    })
+    test('delete an order, authentication error', async () => {
+        // log in a user
+    let res = await request(app).post('/login').send({
+        username: test_user.username,
+        password: test_user.password
+    });
+
+    // add an item
+     await request(app).post(`/carts/${test_user.username}/add`)
+         .send({ product_id: test_product_id, _token:res.body._token })
+
+        //  make an order
+         await request(app).post(`/orders/${test_user.username}/order`)
+             .send({ _token: res.body._token })
+
+        // delete the order
+        let result = await request(app).delete(`/orders/${test_user.username}`)
+            .send({ })
+        expect(result.statusCode).toEqual(401)
+        expect(result.body).toHaveProperty('message', 'You must authenticate first.')
+
+    })
+    test('delete an order, authentication error', async () => {
+        // log in a user
+    let res = await request(app).post('/login').send({
+        username: test_user.username,
+        password: test_user.password
+    });
+
+    // add an item
+     await request(app).post(`/carts/${test_user.username}/add`)
+         .send({ product_id: test_product_id, _token:res.body._token })
+
+        //  make an order
+         await request(app).post(`/orders/${test_user.username}/order`)
+             .send({ _token: res.body._token })
+
+        // delete the order
+        let result = await request(app).delete(`/orders/${test_user_two.username}`)
+            .send({_token: res.body._token })
+        expect(result.statusCode).toEqual(401)
+        expect(result.body).toHaveProperty('message', 'You are not authorized.')
+
+    })
+})
+
+
+describe("get an order history", () => {
 
     test('success, order history for test_user', async () => {
 
@@ -137,8 +208,8 @@ describe("get order history", () => {
         expect(result.body).toHaveProperty('message', 'order submitted')
 
         // get the order history
-        let orders = await request(app).post(`/orders/${test_user.username}/order-history`)
-            .send({ _token: res.body._token })
+        let orders = await request(app).get(`/orders`)
+            .send({ _token: res.body._token, username:test_user.username })
 
 
         expect(orders.statusCode).toEqual(200)
@@ -148,7 +219,7 @@ describe("get order history", () => {
     test('order history, authorization failure', async () => {
 
         // get the order history
-        let orders = await request(app).post(`/orders/${test_user.username}/order-history`)
+        let orders = await request(app).get(`/orders/`)
             .send({ })
 
 
@@ -163,11 +234,14 @@ describe("get order history", () => {
         password: test_user.password
     });
         // get the order history
-        let orders = await request(app).post(`/orders/${test_user_two.username}/order-history`)
-            .send({ _token:res.body._token })
+        let orders = await request(app).get(`/orders`)
+            .send({ _token: res.body._token, username:test_user_two.username  })
+
 
 
         expect(orders.statusCode).toEqual(401)
         expect(orders.body).toHaveProperty('message', 'You are not authorized.')
     })
 })
+
+

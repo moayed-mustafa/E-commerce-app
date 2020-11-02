@@ -9,7 +9,6 @@ const router = express.Router();
 
 const { ensureCorrectUser, authRequired } = require("../middleware/auth");
 
-const Cart = require("../models/cart");
 const User = require("../models/user");
 const Order = require("../models/order");
 
@@ -34,11 +33,12 @@ router.post('/:username/order', authRequired, ensureCorrectUser, async (req, res
 
 
 /** POST / => retrieve order history for a user*/
+//  change this to get, pass the username in the request body
 
-router.post('/:username/order-history', authRequired, ensureCorrectUser, async (req, res, next) => {
+router.get('/', authRequired, ensureCorrectUser, async (req, res, next) => {
     //  create a new order using the user_id
     try {
-        const { id } = await User.findOne(req.params.username)
+        const { id } = await User.findOne(req.body.username)
         const result = await Order.getOrders(id)
         return res.send(result)
 
@@ -53,13 +53,13 @@ router.post('/:username/order-history', authRequired, ensureCorrectUser, async (
 
 
 /** POST / => delete an order*/
-router.delete('/:username/delete-order', authRequired, ensureCorrectUser, async (req, res, next) => {
+router.delete('/:username/', authRequired, ensureCorrectUser, async (req, res, next) => {
     //  create a new order using the user_id
     try {
         //  the order_id comes from the frontEnd
         const order_id = 1 || req.body.order_id;
         await Order.deleteOrder(order_id)
-        return res.send({msg:"order deleted"})
+        return res.send({message:"order deleted"})
 
     } catch (e) {
         return next(e)

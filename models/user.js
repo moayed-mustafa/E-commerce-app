@@ -34,11 +34,11 @@ class User{
         await Cart.makeCart(user.id)
         return user;
       }
+      else {
+        return new ExpressError("Invalid Credentials", 401);
+      }
     }
 
-    const invalidPass = new ExpressError("Invalid Credentials");
-    invalidPass.status = 401;
-    throw invalidPass;
   }
 //   ============================================================================================================================================================
 
@@ -54,7 +54,7 @@ class User{
     );
 
       if (duplicateCheck.rows[0]) {
-       new ExpressError(`There already exists a user with username '${data.username}`, 409);
+       return new ExpressError(`There already exists a user with username '${data.username}`, 409);
 
     }
 
@@ -106,9 +106,8 @@ class User{
     const user = userRes.rows[0];
 
     if (!user) {
-      const error = new Error(`There exists no user '${username}'`);
-      error.status = 404;   // 404 NOT FOUND
-      throw error;
+
+      return new ExpressError(`There exists no user ${username}`, 404)
     }
 
     return user;
@@ -134,9 +133,7 @@ class User{
     const user = result.rows[0];
 
     if (!user) {
-      let notFound = new Error(`There exists no user '${username}`);
-      notFound.status = 404;
-      throw notFound;
+      return new ExpressError(`There exists no user ${username}`, 404)
     }
 
     delete user.password;
@@ -155,10 +152,9 @@ class User{
             [username]);
 
   if (result.rows.length === 0) {
-    let notFound = new Error(`There exists no user '${username}'`);
-    notFound.status = 404;
-    throw notFound;
+    return new ExpressError(`There exists no user ${username}`, 404)
   }
+    return 'user deleted'
 }
 
 

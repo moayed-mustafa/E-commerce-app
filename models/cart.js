@@ -13,10 +13,8 @@ class Cart{
 
     //  * create a new cart
     static async makeCart(user_id) {
-        // console.log("at the cart model", user_id)
         // first check if the user has a  cart to his name
         const cart = await this.getCartId(user_id)
-        // console.log(cart)
         if (cart.length > 0) return;
         else {
             await db.query(
@@ -27,6 +25,7 @@ class Cart{
             )
 
         }
+        return {message:"Cart Created."}
     }
     //  add an item to a cart
 
@@ -55,6 +54,7 @@ class Cart{
              `, [cart_id]
             )
         }
+        return {message:"Added to cart."}
     }
 
 
@@ -67,7 +67,7 @@ class Cart{
         const checkProduct = await this.checkProduct(product_id, user_id)
 
         if (checkProduct.rows.length === 0){
-            throw new ExpressError("can not remove an item that is not in cart", 404)
+            return new ExpressError("can not remove an item that is not in cart", 404)
         }
         if (checkProduct.rows[0].quantity === 1) {
             //  we want to delet the whole row
@@ -90,6 +90,7 @@ class Cart{
              `, [cart_id]
             )
         }
+        return {message:"Removed from cart."}
 
     }
 
@@ -111,6 +112,8 @@ class Cart{
         DELETE from carts
         WHERE user_id = $1
         `, [user_id])
+        return {message: "Deleted Cart."}
+
     }
 
     static async checkProduct(product_id, user_id) {
