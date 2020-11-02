@@ -7,10 +7,7 @@ const bcrypt = require("bcrypt");
 
 const User = require('../../models/user')
 const Cart = require('../../models/cart')
-//  what I want to test:
-//  make a cart
-// add to cart
-//  remove from cart
+
 let user;
 beforeEach(async () => {
     //  create a user
@@ -31,7 +28,6 @@ beforeEach(async () => {
 })
 afterEach(async () => {
     await db.query('DELETE from users')
-    await db.query('DELETE from carts')
     await db.query('DELETE from carts')
 
 })

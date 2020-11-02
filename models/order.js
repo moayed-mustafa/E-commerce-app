@@ -30,19 +30,19 @@ class Order{
 
         const cart_id = cartResult[0].id;
 
-        await this.updateItems(order_id, cart_id)
+        return await this.updateItems(order_id, cart_id)
+
     }
 
 
     static async updateItems(order_id, cart_id) {
-        // maybe check here if the cart_id has anything on the items table
         let isEmpty = await db.query(`
 
             SELECT * FROM items
             WHERE cart_id =$1
         `, [cart_id]);
-        // * console.log(isEmpty.rows[0])
-        if(isEmpty.rows[0].product_id === null) throw new ExpressError('can not make an order with an empty cart', 404)
+        // * console.log(isEmpty.rows[0]) isEmpty.rows[0].product_id === null ||
+        if(isEmpty.rowCount === 0) return new ExpressError('can not make an order with an empty cart', 404)
 
         await db.query(`
         UPDATE items
@@ -56,6 +56,7 @@ class Order{
         SET cart_id = $1
         WHERE cart_id = $2
         `, [null, cart_id])
+        return {message: "Order submitted."}
     }
 
 
@@ -76,11 +77,11 @@ class Order{
     }
 
     static async deleteOrder(order_id) {
-
         await db.query(`
             DELETE FROM orders
             WHERE id = $1
-        `,[order_id])
+        `, [order_id])
+        return { message: "Order deleted." }
 
     }
 
