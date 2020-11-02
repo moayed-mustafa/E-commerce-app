@@ -19,6 +19,7 @@ class Wishlist{
             (user_id, product_id)
             values($1, $2)
         `, [user_id, product_id])
+        return {message: 'Added item from wishlist'}
 
     }
 
@@ -31,14 +32,16 @@ class Wishlist{
             WHERE  user_id = $1 AND product_id = $2
         `, [user_id, product_id])
 
-        if (product.rowCount === 0) throw new ExpressError('can not remove an item that does not exists', 404);
+        if (product.rowCount === 0) return new ExpressError('can not remove an item that does not exists', 404);
 
         await db.query(`
             DELETE FROM  wishlist
             where user_id = $1 AND product_id = $2
         `, [user_id, product_id])
 
+        return {message: 'Removed item from wishlist'}
     }
+
 
 }
 

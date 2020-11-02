@@ -30,7 +30,6 @@ beforeEach(async () => {
 afterEach(async () => {
     await db.query('DELETE from users')
     await db.query('DELETE from carts')
-    await db.query('DELETE from carts')
 
 })
 afterAll(async () => {
