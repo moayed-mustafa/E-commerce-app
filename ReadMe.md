@@ -4,7 +4,7 @@
     the app allows users to browse available products, browse by catgories,
     add something to theri wishlist to buy later or add it to cart and buy immediately.
 - This repo has the backend api for the project.
-- Live site: coming soon
+- Live site: [Shopper](https://shopper-fe.herokuapp.com/)
 
 
  # User flow
