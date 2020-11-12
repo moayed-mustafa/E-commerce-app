@@ -29,13 +29,14 @@ class User{
     if (user) {
       // compare hashed password to a new hash from password
       const isValid = await bcrypt.compare(data.password, user.password);
-      if (isValid) {
+      if (!isValid) {
+        return new ExpressError("Invalid Credentials", 401);
+
+      }
+      else {
         //  * create a cart for the user
         await Cart.makeCart(user.id)
         return user;
-      }
-      else {
-        return new ExpressError("Invalid Credentials", 401);
       }
     }
 

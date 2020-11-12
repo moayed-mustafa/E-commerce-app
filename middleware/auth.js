@@ -23,7 +23,7 @@ function authRequired(req, res, next) {
 
   catch (err) {
     let unauthorized = new Error("You must authenticate first.");
-    unauthorized.status = 401;  // 401 Unauthorized
+    unauthorized.status = 401;
     return next(unauthorized);
   }
 }

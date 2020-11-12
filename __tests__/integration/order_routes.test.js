@@ -186,7 +186,7 @@ describe('delete an order', () => {
 })
 
 
-describe("get an order history", () => {
+describe("retrieve a user's order history", () => {
 
     test('success, order history for test_user', async () => {
 
@@ -208,7 +208,7 @@ describe("get an order history", () => {
         expect(result.body).toHaveProperty('message', 'order submitted')
 
         // get the order history
-        let orders = await request(app).get(`/orders`)
+        let orders = await request(app).post(`/orders`).send({_token:res.body._token,username:test_user.username })
             .send({ _token: res.body._token, username:test_user.username })
 
 
@@ -219,7 +219,7 @@ describe("get an order history", () => {
     test('order history, authorization failure', async () => {
 
         // get the order history
-        let orders = await request(app).get(`/orders/`)
+        let orders = await request(app).post(`/orders`)
             .send({ })
 
 
@@ -234,7 +234,7 @@ describe("get an order history", () => {
         password: test_user.password
     });
         // get the order history
-        let orders = await request(app).get(`/orders`)
+        let orders = await request(app).post(`/orders`)
             .send({ _token: res.body._token, username:test_user_two.username  })
 
 

@@ -33,10 +33,10 @@ class Cart{
 
         const cart = await this.getCartId(user_id)
 
-        let cart_id;
-        const checkProduct = await this.checkProduct(product_id, user_id)
+        let cart_id = cart[0].id;
+        const checkProduct = await this.checkProduct(product_id, user_id, cart_id)
         if (checkProduct.rowCount === 0) {
-            cart_id = cart[0].id
+            // cart_id = cart[0].id
              await db.query(
                 `INSERT INTO items
                 (cart_id, user_id, product_id, quantity)
@@ -45,7 +45,7 @@ class Cart{
             );
 
         } else {
-            cart_id = cart[0].id
+            // cart_id = cart[0].id
             await db.query(
 
             `UPDATE items
@@ -61,17 +61,18 @@ class Cart{
         //  remove an item from a cart
     static async removeFromCart(user_id, product_id) {
         const cart = await this.getCartId(user_id)
-        let cart_id;
+        let cart_id =cart[0].id;
 
 
-        const checkProduct = await this.checkProduct(product_id, user_id)
+        const checkProduct = await this.checkProduct(product_id, user_id, cart_id)
+
 
         if (checkProduct.rows.length === 0){
             return new ExpressError("can not remove an item that is not in cart", 404)
         }
         if (checkProduct.rows[0].quantity === 1) {
-            //  we want to delet the whole row
-            cart_id = cart[0].id
+            //  delet the whole row
+
              await db.query(
                 `DELETE from items
                 WHERE product_id = $1
@@ -80,8 +81,8 @@ class Cart{
             );
 
         } else {
-            //  we want to reduce it by 1
-            cart_id = cart[0].id
+            //  quantity -=1
+
             await db.query(
 
             `UPDATE items
@@ -90,7 +91,7 @@ class Cart{
              `, [cart_id]
             )
         }
-        return {message:"Removed from cart."}
+        return {message:"item removed", status: 200}
 
     }
 
@@ -116,13 +117,16 @@ class Cart{
 
     }
 
-    static async checkProduct(product_id, user_id) {
+    static async checkProduct(product_id, user_id, cart_id) {
+        //  * the change I'm making now is just to replace the user_id with the cart_id
+        //  * note that this change might change the bahaviour of remove from item
        return await db.query(
             `
             SELECT * from items
             WHERE product_id = $1
             AND user_id = $2
-            `, [product_id, user_id]
+            AND cart_id = $3
+            `, [product_id, user_id, cart_id]
 
         )
     }

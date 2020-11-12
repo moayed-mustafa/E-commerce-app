@@ -35,7 +35,7 @@ router.post('/:username/order', authRequired, ensureCorrectUser, async (req, res
 /** POST / => retrieve order history for a user*/
 //  change this to get, pass the username in the request body
 
-router.get('/', authRequired, ensureCorrectUser, async (req, res, next) => {
+router.post('/', authRequired, ensureCorrectUser, async (req, res, next) => {
     //  create a new order using the user_id
     try {
         const { id } = await User.findOne(req.body.username)

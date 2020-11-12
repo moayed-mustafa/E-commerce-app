@@ -32,14 +32,18 @@ class Wishlist{
             WHERE  user_id = $1 AND product_id = $2
         `, [user_id, product_id])
 
+
         if (product.rowCount === 0) return new ExpressError('can not remove an item that does not exists', 404);
 
-        await db.query(`
-            DELETE FROM  wishlist
-            where user_id = $1 AND product_id = $2
-        `, [user_id, product_id])
+        else {
+            await db.query(`
+                DELETE FROM  wishlist
+                where user_id = $1 AND product_id = $2
+            `, [user_id, product_id])
 
-        return {message: 'Removed item from wishlist'}
+            return {message: 'Removed item from wishlist', status:200}
+
+        }
     }
 
 

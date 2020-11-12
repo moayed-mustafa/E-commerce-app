@@ -43,13 +43,19 @@ router.post("/signup", async (req, res, next) => {
     const { error } = signUpSchema.validate(req.body)
     if (error) return next({ status: 400, error: error.message });
 
-    try {
-      const newUser = await User.register(req.body)
-        const token = createToken(newUser);
-        newUser._token = token
-        return res.status(201).json({_token:token});
+  try {
+      // * this problematic because it sends a token regardless of a signup error
+    const newUser = await User.register(req.body)
+    if (newUser.message) {
+      return res.status(newUser.status).json({message:newUser.message})
+    } else {
+      const token = createToken(newUser);
+      newUser._token = token
+      return res.status(201).json({_token:token});
 
-    } catch (e) {
+    }
+
+  } catch (e) {
         return next(e)
     }
 
@@ -72,7 +78,7 @@ router.patch("/:username", ensureCorrectUser, async function(req, res, next) {
       }
 
       const user = await User.update(req.params.username, req.body);
-
+      //  * should make a new jsonwebtoken and send it with the user
 
       return res.json({ ...user });
     } catch (err) {

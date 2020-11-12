@@ -18,8 +18,8 @@ const User = require("../models/user");
 router.post('/:username/add', authRequired, ensureCorrectUser, async (req, res, next) => {
     try {
         const { id } = await User.findOne(req.params.username)
-        //  *have to test the product_id manually since it comes from the front end
-        product_id = req.body.product_id || 7890
+
+        product_id = req.body.product_id
          await Cart.addToCart(id, product_id)
         return res.send({message: "item added"})
 
@@ -33,11 +33,11 @@ router.post('/:username/add', authRequired, ensureCorrectUser, async (req, res, 
 router.post('/:username/remove', authRequired  , ensureCorrectUser, async (req, res, next) => {
     try {
         const {id} = await User.findOne(req.params.username)
-        //  *have to test the product_id manually since it comes from the front end
-        product_id = req.body.product_id || 7890
 
-         await Cart.removeFromCart(id, product_id)
-        return res.send({message: "item removed"})
+        product_id = req.body.product_id
+
+        let result = await Cart.removeFromCart(id, product_id)
+        return res.status(result.status).send({message: result.message})
 
     } catch (e) {
         return next(e)

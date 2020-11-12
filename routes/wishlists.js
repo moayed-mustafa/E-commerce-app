@@ -21,9 +21,8 @@ const User = require("../models/user");
 router.post('/:username/add', authRequired,ensureCorrectUser, async (req, res, next) => {
     try {
         const { id } = await User.findOne(req.params.username)
-        //  *have to test the product_id manually since it comes from the front end
-        // product_id = req.body.product_id
-         await Wishlist.addToWishlist(id, 2345)
+        const product_id = req.body.product_id
+         await Wishlist.addToWishlist(id, product_id)
         return res.send({message: "item added to wishlist"})
 
     } catch (e) {
@@ -36,11 +35,10 @@ router.post('/:username/add', authRequired,ensureCorrectUser, async (req, res, n
 router.post('/:username/remove', authRequired  , ensureCorrectUser, async (req, res, next) => {
     try {
         const {id} = await User.findOne(req.params.username)
-        //  *have to test the product_id manually since it comes from the front end
-                // product_id = req.body.product_id
-
-         await Wishlist.removeFromWishlist(id, 2345)
-        return res.send({message: "item removed from wishlist"})
+            const product_id = req.body.product_id
+        let result = await Wishlist.removeFromWishlist(id, product_id)
+        console.log(result.message, result.status)
+        return res.status(result.status).send({message: result.message})
 
     } catch (e) {
         return next(e)

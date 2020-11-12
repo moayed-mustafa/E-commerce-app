@@ -102,16 +102,16 @@ describe('Remove from wishlist', () => {
 
         // add an item to wishlist first
         let add= await request(app).post(`/wishlist/${test_user.username}/add`)
-        .send({ _token: res.body._token })
+        .send({ _token: res.body._token, product_id: test_product_id })
 
         expect(add.statusCode).toEqual(200)
         // remove it
         let result = await request(app).post(`/wishlist/${test_user.username}/remove`)
-            .send({ _token: res.body._token })
+            .send({ _token: res.body._token, product_id:test_product_id  })
 
 
         expect(result.statusCode).toEqual(200)
-        expect(result.body).toHaveProperty('message', 'item removed from wishlist')
+        expect(result.body).toHaveProperty('message', 'Removed item from wishlist')
 
     })
 
@@ -123,7 +123,7 @@ describe('Remove from wishlist', () => {
         });
 
         let result = await request(app).post(`/wishlist/${test_user.username}/remove`)
-            .send({ _token: res.body._token })
+            .send({ _token: res.body._token, product_id: 12 })
 
         expect(result.statusCode).toEqual(404)
         expect(result.body).toHaveProperty('message', 'can not remove an item that does not exists')

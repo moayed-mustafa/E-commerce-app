@@ -88,7 +88,6 @@ describe('Add to cart, /carts/:username/add', () => {
         expect(result.statusCode).toEqual(401)
         expect(result.body).toHaveProperty("message", "You are not authorized.")
 
-
     })
 })
 
@@ -100,7 +99,6 @@ describe('Remove from cart, /carts/:username/remove', () => {
             username: test_user.username,
             password: test_user.password
         });
-
 
         //  Add an item first
         let addItem = await request(app).post(`/carts/${test_user.username}/add`)
@@ -125,13 +123,10 @@ describe('Remove from cart, /carts/:username/remove', () => {
             username: test_user.username,
             password: test_user.password
         });
-
-
-
-
         let result= await request(app).post(`/carts/${test_user.username}/remove`)
             .send({ _token: res.body._token, product_id: 12 })
 
+        // console.log(result)
         expect(result.statusCode).toEqual(404)
         expect(result.body).toHaveProperty( "message" ,'can not remove an item that is not in cart')
 

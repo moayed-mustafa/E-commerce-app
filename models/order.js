@@ -67,11 +67,9 @@ class Order{
 
             SELECT  order_id, product_id , quantity, order_date  FROM  items
               JOIN orders
-            USING (user_id)
-            WHERE user_id = $1
-
-        ` , [user_id])
-        // WHERE user_id = $1   , [user_id]
+              ON orders.id = items.order_id
+              WHERE items.user_id = $1
+        `, [user_id] )
 
         return result.rows
     }

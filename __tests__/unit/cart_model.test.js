@@ -63,7 +63,7 @@ describe('Removing from a cart', () => {
          await Cart.addToCart(res.id, 3)
         //  remove from the cart
         let result = await Cart.removeFromCart(res.id, 3)
-        expect(result).toHaveProperty('message', 'Removed from cart.')
+        expect(result).toHaveProperty('message', 'item removed')
 
 
     })
