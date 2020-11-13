@@ -2,7 +2,7 @@
   "name": "e-commerce-app",
   "version": "1.0.0",
   "description": "Looking to buy products from the comfort or your sofa? our E-commerce app will provide you with a veriety of different products that you can browse based on the categories you like, add products you like to a wishlist to buy in the future or fill your cart up at the moment.",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
@@ -17,7 +17,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "jest -i"
+    "test": "jest -i",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
