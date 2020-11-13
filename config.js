@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "test") {
   DB_URI  = process.env.DATABASE_URL || 'ecommerce';
 }
 
-console.log("Using database", DB_URI);
+// console.log("Using database", DB_URI);
 
 module.exports = {
   SECRET,

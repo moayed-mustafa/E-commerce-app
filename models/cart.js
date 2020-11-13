@@ -65,7 +65,6 @@ class Cart{
 
 
         const checkProduct = await this.checkProduct(product_id, user_id, cart_id)
-        console.log(checkProduct.rows)
 
 
         if (checkProduct.rows.length === 0){

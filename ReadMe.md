@@ -41,7 +41,7 @@
    - once everything is installed, you can start the server using : nodemon server.js.
    - you can start consuming the api using a REST client like Postman or Insomnia or on the command-line with CURL.
    - all routes and models for this project have been tested using jest.
-   - to run tests, first run the test database : psql > E-commerce-test.sql
+   - to run tests, first run the test database : psql < E-commerce-test.sql
    - in the root of the project run : npm test.
     this will run all of the tests files.
     - you can also run tests individually using : jest name_of_the_test_file
