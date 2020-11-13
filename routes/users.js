@@ -46,13 +46,14 @@ router.post("/signup", async (req, res, next) => {
   try {
       // * this problematic because it sends a token regardless of a signup error
     const newUser = await User.register(req.body)
-    if (newUser.message) {
-      return res.status(newUser.status).json({message:newUser.message})
-    } else {
+
+    if (newUser.username) {
       const token = createToken(newUser);
       newUser._token = token
       return res.status(201).json({_token:token});
-
+    }
+    else {
+      return res.status(newUser.status).json({message:newUser.message})
     }
 
   } catch (e) {

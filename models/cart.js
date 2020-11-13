@@ -27,6 +27,16 @@ class Cart{
         }
         return {message:"Cart Created."}
     }
+
+    // get items currently in cart
+    static async getItems(user_id, cart_id) {
+        const result= await db.query(`
+            SELECT product_id, quantity FROM items
+            WHERE user_id = $1
+            AND cart_id = $2
+        `, [user_id, cart_id]);
+        return result.rows
+    }
     //  add an item to a cart
 
     static async addToCart(user_id, product_id) {
@@ -61,11 +71,12 @@ class Cart{
         //  remove an item from a cart
     static async removeFromCart(user_id, product_id) {
         const cart = await this.getCartId(user_id)
-        let cart_id =cart[0].id;
+        let cart_id = cart[0].id;
+
 
 
         const checkProduct = await this.checkProduct(product_id, user_id, cart_id)
-
+        console.log(checkProduct.rows)
 
         if (checkProduct.rows.length === 0){
             return new ExpressError("can not remove an item that is not in cart", 404)

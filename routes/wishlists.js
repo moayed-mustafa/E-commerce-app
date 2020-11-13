@@ -15,7 +15,18 @@ const Wishlist = require("../models/wishlist");
 const User = require("../models/user");
 
 
+/** POST / => get items on  wishlist*/
+router.post('/:username', authRequired, ensureCorrectUser, async (req, res, next) => {
+    try {
+        const { id } = await User.findOne(req.params.username)
+        const items = await Wishlist.getItems(id)
+        return res.send(items)
 
+    } catch (e) {
+        return next(e)
+    }
+
+})
 /** POST / => add to wishlist*/
 
 router.post('/:username/add', authRequired,ensureCorrectUser, async (req, res, next) => {

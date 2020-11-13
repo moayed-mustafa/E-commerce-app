@@ -73,7 +73,12 @@ class User{
           data.last_name,
           data.email,
           data.address
-        ]);
+      ]);
+
+    const {id} = await this.findOne(data.username)
+
+    //  * create a cart for the user
+    await Cart.makeCart(id)
 
       return result.rows[0];
 

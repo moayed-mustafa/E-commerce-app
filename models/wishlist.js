@@ -12,6 +12,16 @@ const ExpressError = require("../helpers/expressError")
 class Wishlist{
 
 
+    static async getItems(user_id) {
+
+        const result = await db.query(`
+            SELECT product_id FROM
+            wishlist
+            WHERE user_id = $1
+        `, [user_id])
+        return result.rows
+
+    }
     static async addToWishlist(user_id, product_id) {
 
         await db.query(`
@@ -31,7 +41,6 @@ class Wishlist{
             SELECT * from wishlist
             WHERE  user_id = $1 AND product_id = $2
         `, [user_id, product_id])
-
 
         if (product.rowCount === 0) return new ExpressError('can not remove an item that does not exists', 404);
 
