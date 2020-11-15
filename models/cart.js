@@ -40,7 +40,6 @@ class Cart{
     //  add an item to a cart
 
     static async addToCart(user_id, product_id) {
-
         const cart = await this.getCartId(user_id)
 
         let cart_id = cart[0].id;
@@ -60,8 +59,8 @@ class Cart{
 
             `UPDATE items
             SET quantity = quantity + 1
-            WHERE cart_id = $1
-             `, [cart_id]
+            WHERE product_id = $1
+             `, [product_id]
             )
         }
         return {message:"Added to cart."}
@@ -76,7 +75,7 @@ class Cart{
 
 
         const checkProduct = await this.checkProduct(product_id, user_id, cart_id)
-        console.log(checkProduct.rows)
+
 
         if (checkProduct.rows.length === 0){
             return new ExpressError("can not remove an item that is not in cart", 404)
@@ -98,8 +97,8 @@ class Cart{
 
             `UPDATE items
             SET quantity = quantity - 1
-            WHERE cart_id = $1
-             `, [cart_id]
+            WHERE product_id = $1
+             `, [product_id]
             )
         }
         return {message:"item removed", status: 200}

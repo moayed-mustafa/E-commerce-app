@@ -39,6 +39,7 @@ afterAll(async () => {
 describe('Creating a cart', () => {
     test('create a cart', async () => {
         const res = await User.findOne(user.username)
+        await Cart.destroyCart(res.id)
         let result = await Cart.makeCart(res.id)
         expect(result).toHaveProperty('message', 'Cart Created.')
     })
